@@ -29,7 +29,6 @@ class Ingredient(models.Model):
 
     name = models.CharField(
         max_length=256,
-        unique=True,
         verbose_name='Ингредиент',
     )
     measurement_unit = models.CharField(
@@ -53,20 +52,35 @@ class Recipe(models.Model):
         verbose_name='Описание',
     )
     tags = ArrayField(
-        models.ForeignKey(
-            Tag,
-            on_delete=models.CASCADE,
-        ),
+        models.PositiveIntegerField(),
+        blank=True,
     )
     ingredients = ArrayField(
-        models.ForeignKey(
-            Ingredient,
-            on_delete=models.CASCADE,
+        ArrayField(
+            models.PositiveIntegerField(),
+            size=2,
         ),
+    )
+    amount = models.ManyToManyField(
+        Ingredient,
+        through='Amount',
     )
     cooking_time = models.PositiveIntegerField(
         verbose_name="Время приготовления",
     )
     image = models.BinaryField(
         verbose_name="Картинка",
+    )
+
+
+class Amount(models.Model):
+    """Связь рецепт ингредиент."""
+    amount = models.PositiveIntegerField()
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+    )
+    ingredient = models.ForeignKey(
+        Ingredient,
+        on_delete=models.CASCADE,
     )
