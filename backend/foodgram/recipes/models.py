@@ -36,6 +36,9 @@ class Ingredient(models.Model):
         verbose_name='Еденица измерения'
     )
 
+    def __str__(self):
+        return self.name
+
 
 class Recipe(models.Model):
     """Модель рецепт."""
@@ -47,6 +50,10 @@ class Recipe(models.Model):
     name = models.CharField(
         max_length=200,
         verbose_name='Название',
+    )
+    pub_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата публикации'
     )
     text = models.TextField(
         verbose_name='Описание',
@@ -63,24 +70,69 @@ class Recipe(models.Model):
     )
     amount = models.ManyToManyField(
         Ingredient,
-        through='Amount',
+        through='IngredientsInRecipes',
     )
     cooking_time = models.PositiveIntegerField(
         verbose_name="Время приготовления",
     )
-    image = models.BinaryField(
-        verbose_name="Картинка",
+    image = models.ImageField(
+        verbose_name='Картинка',
+        upload_to='recipe/',
     )
 
+    def __str__(self):
+        return self.name
 
-class Amount(models.Model):
+
+class IngredientsInRecipes(models.Model):
     """Связь рецепт ингредиент."""
-    amount = models.PositiveIntegerField()
+    amount = models.PositiveIntegerField(
+        verbose_name='Количество',
+    )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
+        related_name='amount_ingredient',
     )
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
+        related_name='amount',
+    )
+
+
+class Favorite(models.Model):
+    """Модель избранное."""
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+    )
+
+
+class ShoppingCart(models.Model):
+    """Модель список покупок."""
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+    )
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='follower',
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='following',
     )
