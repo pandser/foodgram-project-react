@@ -131,4 +131,4 @@ dmypy.json
 # .idea
 .idea
 
-recipe/
+backend/foodgram/recipe/
