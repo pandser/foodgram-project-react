@@ -21,6 +21,9 @@ class User(AbstractUser):
     def is_subscribed(self):
         return False
 
+    def __str__(self):
+        return f'{self.first_name} {self.first_name}'
+
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'

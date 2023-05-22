@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import validate_slug
-from django.contrib.postgres.fields import ArrayField
 
 from users.models import User
 
@@ -22,6 +21,9 @@ class Tag(models.Model):
         validators=(validate_slug,),
         verbose_name='Уникальный слаг',
     )
+
+    def __str__(self):
+        return self.name
 
 
 class Ingredient(models.Model):
@@ -58,17 +60,11 @@ class Recipe(models.Model):
     text = models.TextField(
         verbose_name='Описание',
     )
-    tags = ArrayField(
-        models.PositiveIntegerField(),
-        blank=True,
+    tags = models.ManyToManyField(
+        Tag,
+        verbose_name='Тэг',
     )
-    ingredients = ArrayField(
-        ArrayField(
-            models.PositiveIntegerField(),
-            size=2,
-        ),
-    )
-    amount = models.ManyToManyField(
+    ingredients = models.ManyToManyField(
         Ingredient,
         through='IngredientsInRecipes',
     )
@@ -92,12 +88,12 @@ class IngredientsInRecipes(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='amount_ingredient',
+        related_name='recipe',
     )
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name='amount',
+        related_name='ingredient',
     )
 
 
