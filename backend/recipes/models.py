@@ -39,7 +39,7 @@ class Ingredient(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return f'{self.name} ,({self.measurement_unit})'
 
 
 class Recipe(models.Model):
@@ -63,10 +63,12 @@ class Recipe(models.Model):
     tags = models.ManyToManyField(
         Tag,
         verbose_name='Тэг',
+        blank=True,
     )
     ingredients = models.ManyToManyField(
         Ingredient,
         through='IngredientsInRecipes',
+        related_name='recipes'
     )
     cooking_time = models.PositiveIntegerField(
         verbose_name="Время приготовления",
@@ -82,18 +84,19 @@ class Recipe(models.Model):
 
 class IngredientsInRecipes(models.Model):
     """Связь рецепт ингредиент."""
-    amount = models.PositiveIntegerField(
-        verbose_name='Количество',
-    )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='recipe',
+        related_name='ingredient',
     )
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name='ingredient',
+        related_name='recipe',
+    )
+    amount = models.IntegerField(
+        verbose_name='Количество',
+        default=1,
     )
 
 
@@ -102,6 +105,7 @@ class Favorite(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name='favorite',
     )
     recipe = models.ForeignKey(
         Recipe,
@@ -114,6 +118,7 @@ class ShoppingCart(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name='cart',
     )
     recipe = models.ForeignKey(
         Recipe,

@@ -1,11 +1,15 @@
 from djoser.serializers import UserSerializer, UserCreateSerializer
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
+from django.db.models import F
 
 from users.models import User
 from recipes.models import Tag, Ingredient, IngredientsInRecipes, Recipe
 
 
 class CustomUserSerializer(UserSerializer):
+    is_subscribed = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = (
@@ -16,6 +20,10 @@ class CustomUserSerializer(UserSerializer):
             'last_name',
             'is_subscribed',
         )
+
+    def get_is_subscribed(self, obj):
+        user = self.context.get('request').user
+        return user.follower.filter(author=obj).exists()
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
@@ -52,19 +60,12 @@ class IngredientSerializer(serializers.ModelSerializer):
         )
 
 
-class IngredientsInRecipesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = IngredientsInRecipes
-        fields = (
-            'ingredient',
-            'amount',
-        )
-
-
 class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
     author = CustomUserSerializer()
-    ingredients = IngredientsInRecipesSerializer(many=True)
+    ingredients = serializers.SerializerMethodField()
+    is_favorited = serializers.SerializerMethodField()
+    is_in_shopping_cart = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
@@ -73,10 +74,23 @@ class RecipeSerializer(serializers.ModelSerializer):
             'tags',
             'author',
             'ingredients',
-            # 'is_favorited',
-            # 'is_in_shopping_cart',
+            'is_favorited',
+            'is_in_shopping_cart',
             'name',
             'image',
             'text',
             'cooking_time',
         )
+
+    def get_ingredients(self, recipe):
+        return recipe.ingredients.values(
+            'id', 'name', 'measurement_unit', amount=F('recipe__amount')
+        )
+
+    def get_is_favorited(self, recipe):
+        user = self.context.get('request').user
+        return user.favorite.filter(recipe=recipe).exists()
+
+    def get_is_in_shopping_cart(self, recipe):
+        user = self.context.get('request').user
+        return user.cart.filter(recipe=recipe).exists()

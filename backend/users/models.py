@@ -17,12 +17,8 @@ class User(AbstractUser):
         unique=True,
     )
 
-    @property
-    def is_subscribed(self):
-        return False
-
     def __str__(self):
-        return f'{self.first_name} {self.first_name}'
+        return f'{self.first_name} {self.last_name}'
 
     class Meta:
         verbose_name = 'Пользователь'
