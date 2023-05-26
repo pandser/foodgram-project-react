@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.http import HttpResponse
 from djoser.views import UserViewSet
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
-from recipes.models import Tag, Ingredient, Recipe
-from api.serializers import TagSerializer, IngredientSerializer, RecipeSerializer
+from recipes.models import Tag, Ingredient, Recipe, Follow
+from users.models import User
+from api.serializers import TagSerializer, IngredientSerializer, RecipeSerializer, FollowSerializer
 
 
 class TagViewSet(ReadOnlyModelViewSet):
@@ -19,3 +21,15 @@ class IngredientViewSet(ModelViewSet):
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class FollowViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = FollowSerializer
+
+    def get_queryset(self):
+        return User.objects.filter(following__user=self.request.user)
+

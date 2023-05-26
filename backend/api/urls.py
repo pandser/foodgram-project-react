@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from api.views import TagViewSet, IngredientViewSet, RecipeViewSet
+from api.views import TagViewSet, IngredientViewSet, RecipeViewSet, FollowViewSet
 
 app_name = 'api'
 
@@ -24,7 +24,9 @@ router.register(
 )
 
 urlpatterns = [
+    path('users/subscriptions/', FollowViewSet.as_view({'get': 'list'}), name='subscriptions'),
     path('', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
+
     path('', include(router.urls)),
 ]
