@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -18,8 +17,7 @@ from api.serializers import (CustomUserSerializer, FollowSerializer,
                              RecipeShortSerializer, TagSerializer)
 from recipes.models import (Favorite, Follow, Ingredient, IngredientsInRecipes,
                             Recipe, ShoppingCart, Tag)
-
-User = get_user_model()
+from users.models import User
 
 
 class TagViewSet(ReadOnlyModelViewSet):

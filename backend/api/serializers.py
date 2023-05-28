@@ -1,6 +1,5 @@
 import base64
 
-from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from django.db.models import F
 from djoser.serializers import UserCreateSerializer, UserSerializer
@@ -9,8 +8,7 @@ from rest_framework.exceptions import ValidationError
 
 from recipes.models import (Follow, Ingredient, IngredientsInRecipes, Recipe,
                             Tag)
-
-User = get_user_model()
+from users.models import User
 
 
 class Base64ImageField(serializers.ImageField):
@@ -184,7 +182,12 @@ class RecipeShortSerializer(serializers.ModelSerializer):
             'image',
             'cooking_time',
         )
-        read_only_fields = '__all__',
+        read_only_fields = (
+            'id',
+            'name',
+            'image',
+            'cooking_time',
+        )
 
 
 class FollowSerializer(CustomUserSerializer):
