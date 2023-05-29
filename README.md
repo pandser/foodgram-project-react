@@ -1,5 +1,5 @@
 # Дипломный проект Foodgram
-![Зелёный - это хорошо!](https://github.com/pandser/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
+![Зелёный - это хорошо!](https://github.com/pandser/foodgram-project-react/actions/workflows/foodgram.yml/badge.svg)
 
 Cайт Foodgram, «Продуктовый помощник». 
 На этом сервисе пользователи смогут публиковать рецепты, подписываться на публикации других пользователей, добавлять понравившиеся рецепты в список «Избранное», а перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
@@ -68,3 +68,15 @@ scp -r infra/* <имя пользователя>@<ip вашего сервера
 sudo docker-compose up
 ```
 
+- Выполнить следующие команды
+```bash
+# Собрать и выполнить миграции
+sudo docker exec -it foodgram_back python manage.py makemigrations
+sudo docker exec -it foodgram_back python manage.py migrate
+# Создать суперпользователя
+sudo docker exec -it app python manage.py createsuperuser
+# Импортировать ингредиенты
+sudo docker exec -it app python manage.py importcsv
+# Собрать статику
+sudo docker exec -it app python manage.py collectstatic --no-input
+```
