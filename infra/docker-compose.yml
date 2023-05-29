@@ -2,9 +2,10 @@ version: '3.3'
 services:
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+#    build:
+#      context: ../frontend
+#      dockerfile: Dockerfile
+    image: pandser/foodgram_front:latest
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
@@ -28,12 +29,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ../backend/foodgram/.env
+      - .env
 
   web:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+#    build:
+#      context: ../backend
+#      dockerfile: Dockerfile
+    image: pandser/foodgram_back:v1.0
     restart: always
     volumes:
       - static_value:/app/static/
@@ -41,7 +43,7 @@ services:
     depends_on:
       - db
     env_file:
-      - ../backend/foodgram/.env
+      - .env
 
 volumes:
   static_value:
