@@ -80,3 +80,16 @@ sudo docker exec -it app python manage.py importcsv
 # Собрать статику
 sudo docker exec -it app python manage.py collectstatic --no-input
 ```
+
+---
+
+### Проект доступен по адресу 
+http://158.160.105.109/
+
+доступ к админке
+
+http://158.160.105.109/admin/
+
+login: root (root@ya.ru)
+
+password: root
