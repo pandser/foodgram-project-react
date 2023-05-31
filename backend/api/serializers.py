@@ -112,7 +112,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def validate_name(self, value):
         if not re.fullmatch(r'^[а-яА-Яa-zA-Z\s]+$', value):
-            raise ValidationError('Имя рецепта должно состоять из ')
+            raise ValidationError('Имя рецепта должно состоять из букв')
         return value
 
     def create(self, validated_data):
