@@ -1,7 +1,6 @@
 from django.core.validators import validate_slug
 from django.db import models
 
-from recipes.validators import validate_name
 from users.models import User
 
 
