@@ -63,7 +63,6 @@ class Recipe(models.Model):
     )
     name = models.CharField(
         max_length=200,
-        validators=(validate_name,),
         verbose_name='Название',
     )
     pub_date = models.DateTimeField(

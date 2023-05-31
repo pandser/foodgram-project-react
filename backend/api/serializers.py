@@ -1,4 +1,5 @@
 import base64
+import re
 
 from django.core.files.base import ContentFile
 from django.db.models import F
@@ -108,6 +109,11 @@ class RecipeSerializer(serializers.ModelSerializer):
             }
         )
         return data
+
+    def validate_name(self, value):
+        if not re.fullmatch(r'^[а-яА-Яa-zA-Z\s]+$', value):
+            raise ValidationError('Имя рецепта должно состоять из ')
+        return value
 
     def create(self, validated_data):
         tags = validated_data.pop('tags')
