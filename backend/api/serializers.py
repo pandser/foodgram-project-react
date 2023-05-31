@@ -1,5 +1,4 @@
 import base64
-import re
 
 from django.core.files.base import ContentFile
 from django.db.models import F
