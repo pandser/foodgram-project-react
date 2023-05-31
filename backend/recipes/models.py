@@ -1,6 +1,7 @@
 from django.core.validators import validate_slug
 from django.db import models
 
+from recipes.validators import validate_name
 from users.models import User
 
 
@@ -62,6 +63,7 @@ class Recipe(models.Model):
     )
     name = models.CharField(
         max_length=200,
+        validators=validate_name,
         verbose_name='Название',
     )
     pub_date = models.DateTimeField(
