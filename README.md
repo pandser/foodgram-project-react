@@ -1,5 +1,5 @@
 # Дипломный проект Foodgram
-![Зелёный - это хорошо!](https://github.com/pandser/foodgram-project-react/actions/workflows/foodgram.yml/badge.svg)
+![foodgram](https://github.com/pandser/foodgram-project-react/actions/workflows/foodgram.yml/badge.svg)
 
 Cайт Foodgram, «Продуктовый помощник». 
 На этом сервисе пользователи смогут публиковать рецепты, подписываться на публикации других пользователей, добавлять понравившиеся рецепты в список «Избранное», а перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
@@ -82,14 +82,3 @@ sudo docker exec -it app python manage.py collectstatic --no-input
 ```
 
 ---
-
-### Проект доступен по адресу 
-http://158.160.105.109/
-
-доступ к админке
-
-http://158.160.105.109/admin/
-
-login: root (root@ya.ru)
-
-password: root
